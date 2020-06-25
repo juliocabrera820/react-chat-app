@@ -1,9 +1,10 @@
 import React from "react";
+import Chat from "./componentes/chat";
 
 const App = () => {
   return (
-    <div>
-      <h2>CHAT APP</h2>
+    <div className="container col-md-4 my-5">
+      <Chat />
     </div>
   );
 };
