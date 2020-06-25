@@ -5,7 +5,9 @@ const socketIO = require("socket.io")(http);
 const PORT = 4000;
 socketIO.on("connection", (socket) => {
   console.log("new connection");
-  console.log(socket.id);
+  socket.on("mensaje", ({ usuario, texto }) => {
+    socketIO.emit("recibir:mensaje", { usuario, texto });
+  });
 });
 http.listen(PORT, () => {
   console.log(`Escuchando en el puerto ${PORT}`);
