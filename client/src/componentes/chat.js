@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { useForm } from "react-hook-form";
+import Mensaje from "./mensaje";
 const socket = io.connect("http://localhost:4000");
 
 const Chat = () => {
@@ -20,56 +21,56 @@ const Chat = () => {
   };
   const recibirMensaje = () =>
     mensajes.map(({ usuario, texto }, index) => (
-      <div key={index} className="alert alert-primary">
-        <h3 className="info">
-          {usuario}: <span>{texto} </span>
-        </h3>
-      </div>
+      <Mensaje usuario={usuario} texto={texto} key={index} />
     ));
   const ESPACIOS_BLANCO = "No se permiten espacios en blanco";
   return (
-    <div>
-      <h2 className="text-center">Room chat</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <input
-            ref={register({
-              required: "Debes ingresar un usuario",
-              validate: (usuario) => usuario.trim() !== "" || ESPACIOS_BLANCO,
-            })}
-            type="text"
-            className={`form-control ${
-              errors.usuario ? "is-invalid" : "is-valid"
-            }`}
-            placeholder="Ingresar nombre"
-            name="usuario"
-          />
-          <div className="valid-feedback">Correcto</div>
-          <div className="invalid-feedback">
-            {errors.usuario && errors.usuario.message}
+    <div className="row">
+      <div className="col-md-6">
+        <h2 className="text-center">Room chat</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <input
+              ref={register({
+                required: "Debes ingresar un usuario",
+                validate: (usuario) => usuario.trim() !== "" || ESPACIOS_BLANCO,
+              })}
+              type="text"
+              className={`form-control ${
+                errors.usuario ? "is-invalid" : "is-valid"
+              }`}
+              placeholder="Ingresar nombre"
+              name="usuario"
+            />
+            <div className="valid-feedback">Correcto</div>
+            <div className="invalid-feedback">
+              {errors.usuario && errors.usuario.message}
+            </div>
           </div>
-        </div>
-        <div className="form-group">
-          <input
-            ref={register({
-              required: "Debes ingresar un mensaje",
-              validate: (texto) => texto.trim() !== "" || ESPACIOS_BLANCO,
-            })}
-            type="text"
-            className={`form-control ${
-              errors.texto ? "is-invalid" : "is-valid"
-            }`}
-            placeholder="Ingresa mensaje"
-            name="texto"
-          />
-          <div className="valid-feedback">Correcto</div>
-          <div className="invalid-feedback">
-            {errors.texto && errors.texto.message}
+          <div className="form-group">
+            <input
+              ref={register({
+                required: "Debes ingresar un mensaje",
+                validate: (texto) => texto.trim() !== "" || ESPACIOS_BLANCO,
+              })}
+              type="text"
+              className={`form-control ${
+                errors.texto ? "is-invalid" : "is-valid"
+              }`}
+              placeholder="Ingresa mensaje"
+              name="texto"
+            />
+            <div className="valid-feedback">Correcto</div>
+            <div className="invalid-feedback">
+              {errors.texto && errors.texto.message}
+            </div>
           </div>
-        </div>
-        <button className="btn btn-info btn-block">Enviar</button>
-      </form>
-      <div className="my-4"> {recibirMensaje()}</div>
+          <button className="btn btn-info btn-block">Enviar</button>
+        </form>
+      </div>
+      <div className="col-md-6">
+        <h2 className="text-center">Mensajes</h2> {recibirMensaje()}
+      </div>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 import React from "react";
 
-const Mensaje = () => (
-  <div>
-    <h3>Usuario:Mensaje</h3>
+const Mensaje = ({ usuario, texto }) => (
+  <div className="alert alert-primary">
+    <h5>
+      {usuario.toUpperCase()}: <span>{texto} </span>
+    </h5>
   </div>
 );
 
