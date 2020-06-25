@@ -4,18 +4,28 @@ import { useForm } from "react-hook-form";
 const socket = io.connect("http://localhost:4000");
 
 const Chat = () => {
-  useEffect(() => {}, []);
-  const [mensaje, setMensaje] = useState({ usuario: "", text: "" });
   const [mensajes, setMensajes] = useState([]);
+  useEffect(() => {
+    socket.on("recibir:mensaje", ({ usuario, texto }) => {
+      setMensajes([...mensajes, { usuario, texto }]);
+    });
+  }, [mensajes]);
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data, event) => {
-    console.log(data);
     enviarMensaje(data);
     event.target.reset();
   };
   const enviarMensaje = (mensaje) => {
     socket.emit("mensaje", mensaje);
   };
+  const recibirMensaje = () =>
+    mensajes.map(({ usuario, texto }, index) => (
+      <div key={index} className="alert alert-primary">
+        <h3 className="info">
+          {usuario}: <span>{texto} </span>
+        </h3>
+      </div>
+    ));
   const ESPACIOS_BLANCO = "No se permiten espacios en blanco";
   return (
     <div>
@@ -59,6 +69,7 @@ const Chat = () => {
         </div>
         <button className="btn btn-info btn-block">Enviar</button>
       </form>
+      <div className="my-4"> {recibirMensaje()}</div>
     </div>
   );
 };
